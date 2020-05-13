@@ -38,7 +38,7 @@ resource "azurerm_api_management_api_policy" "api_policy" {
         <value>@(context.Request.Headers["Authorization"].First().Split(' ')[1].AsJwt()?.Claims["tid"].FirstOrDefault())</value>
     </set-header>
         <set-header name="${var.header_prefix}_ROLES" exists-action="append">
-        <value>@(context.Request.Headers["Authorization"].First().Split(' ')[1].AsJwt()?.Claims["roles"].ToList().SerializeObject())</value>
+        <value>@(JsonConvert.SerializeObject(context.Request.Headers["Authorization"].First().Split(' ')[1].AsJwt()?.Claims["roles"].ToList()))</value>
     </set-header>
     <set-backend-service id="tf-generated-policy" backend-id="${var.backend_name}" />
     <base />
